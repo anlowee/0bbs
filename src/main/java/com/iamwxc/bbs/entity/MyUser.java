@@ -63,4 +63,9 @@ public class MyUser {
         moment.setMyUser(null);
     }
 
+    @Override
+    public String toString() {
+        return username;
+    }
+
 }
