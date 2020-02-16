@@ -2,6 +2,7 @@ package com.iamwxc.bbs.entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.iamwxc.bbs.entity.moment.Moment;
+import com.iamwxc.bbs.entity.moment.MomentComment;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -41,6 +42,10 @@ public class MyUser {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "myUser")
     @JsonManagedReference
     private List<Moment> moments;
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "myUser")
+    @JsonManagedReference
+    private List<MomentComment> momentComments;
 
     @CreatedDate
     private Long gmtCreate;
