@@ -1,7 +1,7 @@
 package com.iamwxc.bbs.service;
 
 import com.iamwxc.bbs.entity.MyUser;
-import com.iamwxc.bbs.repository.MyUserRepository;
+import com.iamwxc.bbs.dao.MyUserDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -26,7 +26,7 @@ import org.springframework.stereotype.Service;
 public class MyUserDetailsService implements UserDetailsService {
 
     @Autowired
-    private MyUserRepository myUserRepository;
+    private MyUserDAO myUserDAO;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -38,7 +38,7 @@ public class MyUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-        MyUser myUser = myUserRepository.findByUsername(s);
+        MyUser myUser = myUserDAO.findByUsername(s);
         User user = null;
         if (myUser != null) {
             String password = myUser.getPassword();

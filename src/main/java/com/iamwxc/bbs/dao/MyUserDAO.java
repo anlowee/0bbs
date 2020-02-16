@@ -1,7 +1,8 @@
-package com.iamwxc.bbs.repository;
+package com.iamwxc.bbs.dao;
 
 import com.iamwxc.bbs.entity.MyUser;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -14,7 +15,7 @@ import org.springframework.stereotype.Repository;
  * @version 1.0
  */
 @Repository
-public interface MyUserRepository extends JpaRepository<MyUser, Long> {
+public interface MyUserDAO extends JpaRepository<MyUser, Long> {
 
     MyUser findByUsername(String s);
 

@@ -1,8 +1,15 @@
 package com.iamwxc.bbs.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.iamwxc.bbs.entity.moment.Moment;
 import lombok.Data;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * Class description goes here.
@@ -15,12 +22,14 @@ import javax.persistence.*;
  */
 @Data
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 public class MyUser {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long userID;
 
+    // personal basic info
     @Column(unique = true)
     private String username;
 
@@ -28,8 +37,25 @@ public class MyUser {
 
     private String role;
 
+    // personal moments info
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "myUser")
+    @JsonManagedReference
+    private List<Moment> moments;
+
+    @CreatedDate
     private Long gmtCreate;
 
+    @LastModifiedDate
     private Long gmtModified;
+
+    public void addMoment(Moment moment) {
+        moments.add(moment);
+        moment.setMyUser(this);
+    }
+
+    public void removeMoment(Moment moment) {
+        moments.remove(moment);
+        moment.setMyUser(null);
+    }
 
 }
