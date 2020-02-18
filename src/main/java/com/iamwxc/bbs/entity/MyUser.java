@@ -9,6 +9,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -65,7 +66,12 @@ public class MyUser {
 
     @Override
     public String toString() {
-        return username;
+        Date createDate = new Date();
+        if (gmtCreate != null)
+            createDate.setTime(gmtCreate);
+        else
+            createDate.setTime(0L);
+        return "username:" + username + "; role:" + role + "; create:" + createDate.toString();
     }
 
 }
