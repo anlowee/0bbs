@@ -27,6 +27,11 @@ import java.util.Optional;
 @EntityListeners(AuditingEntityListener.class)
 public class MyUser {
 
+    public MyUser() {
+        profileURL = "http://www.gravatar.com/avatar?s=64";
+        bbsPoint = 0L;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userID;
@@ -38,6 +43,11 @@ public class MyUser {
     private String password;
 
     private String role;
+
+    // some other feature
+    private String profileURL;
+
+    private Long bbsPoint;
 
     // personal moments info
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "myUser")
