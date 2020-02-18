@@ -7,6 +7,7 @@ import com.iamwxc.bbs.util.MyUserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
 /**
  * Class description goes here.
@@ -18,21 +19,21 @@ import org.springframework.web.bind.annotation.RestController;
  * @version 1.0
  */
 @RestController
-public class HelloController {
+public class IndexController {
 
     @Autowired
     private MomentDAO momentDAO;
 
     @Autowired
-    private MyUserDAO myUserDAO;
-
-    @Autowired
     private MyUserUtil myUserUtil;
 
-    @GetMapping("/hello")
-    public MyUser greeting() {
+    @GetMapping("/")
+    public ModelAndView index() {
+        ModelAndView modelAndView = new ModelAndView("index");
         MyUser currentUser = myUserUtil.getLoginUser();
-        return currentUser;
+        modelAndView.addObject("user", currentUser);
+        modelAndView.addObject("moments", momentDAO.findByMomentID(1L));
+        return modelAndView;
     }
 
 }
