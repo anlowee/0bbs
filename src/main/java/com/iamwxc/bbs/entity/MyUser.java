@@ -49,6 +49,8 @@ public class MyUser {
 
     private Long bbsPoint;
 
+    private String emailAddress;
+
     // personal moments info
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "myUser")
     @JsonManagedReference
