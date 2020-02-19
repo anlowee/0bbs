@@ -25,6 +25,12 @@ import java.util.List;
 @EntityListeners(AuditingEntityListener.class)
 public class Moment {
 
+    public Moment() {
+        readings = 0L;
+        likes = 0L;
+        dislikes = 0L;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long momentID;
@@ -41,6 +47,13 @@ public class Moment {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "moment")
     @JsonManagedReference
     private List<MomentComment> momentComments;
+
+    // other info
+    private Long readings;
+
+    private Long likes;
+
+    private Long dislikes;
 
     @CreatedDate
     private Long gmtCreate;
