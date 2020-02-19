@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="">
+<head>
+    <title>0bbs</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="css/custom.css">
+    <script src="js/jquery.js" type="application/javascript"></script>
+    <script src="js/bootstrap.min.js" type="application/javascript"></script>
+</head>
+<body>
+<div class="container-fluid main">
+    <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
+        <form class="form-horizontal" th:action="@{/profile}" method="post" style="margin: 16px">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" class="form-control" id="username" name="username" th:value="${username}" placeholder="新用户名喵~">
+            </div>
+            <div class="alert alert-danger" role="alert" th:if="${usernameNull}"><span th:text="${usernameNull}"></span></div>
+            <div class="alert alert-danger" role="alert" th:if="${usernameExist}"><span th:text="${usernameExist}"></span></div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="text" class="form-control" id="password" name="password" th:value="${password}" placeholder="新密码喵~">
+            </div>
+            <div class="alert alert-danger" role="alert" th:if="${passwordNull}"><span th:text="${passwordNull}"></span></div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="text" class="form-control" id="email" name="email" th:value="${email}" placeholder="你的gravatar绑定邮箱喵~">
+            </div>
+            <div class="alert alert-success" role="alert" th:if="${success}"><span th:text="${success}"></span></div>
+            <button type="submit" class="btn btn-default">更新资料</button>
+        </form>
+        <div class="media-left" style="margin-bottom: 16px">
+            <a href="#">
+                <img class="media-object" th:src="${profileURL}"
+                     style="border-radius: 16px; border: 3px solid #444"
+                     alt="http://www.gravatar.com/avatar?s=64">
+            </a>
+        </div>
+    </div>
+</div>
+</body>
+</html>
