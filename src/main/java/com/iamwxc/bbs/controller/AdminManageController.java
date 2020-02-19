@@ -62,10 +62,13 @@ public class AdminManageController {
         modelAndView.addObject("presetRole", "");
         modelAndView.addObject("delUsername", "");
 
-        if (presetUsername == null && presetPassword == null && presetRole == null && delUsername == null)
+        if ((presetUsername == null || presetUsername.equals("")) &&
+                (presetPassword == null || presetPassword.equals("")) &&
+                (presetRole == null || presetRole.equals("")) &&
+                (delUsername == null || delUsername.equals("")))
             // if admin submit nothing
             modelAndView.addObject("error", "请填写注册用户或注销用户的信息喵~");
-        else if (delUsername != null) {
+        else if (delUsername != null && !delUsername.equals("")) {
             // handle delete user
             MyUser targetUser = myUserDAO.findByUsername(delUsername);
             if (targetUser == null) {
@@ -78,11 +81,11 @@ public class AdminManageController {
             }
         } else {
             // handle register user
-            if (presetUsername == null) {
+            if (presetUsername == null || presetUsername.equals("")) {
                 modelAndView.addObject("error", "请填写新用户预设用户名喵~");
-            } else if (presetPassword == null) {
+            } else if (presetPassword == null || presetPassword.equals("")) {
                 modelAndView.addObject("error", "请填写新用户预设密码喵~");
-            } else if (presetRole == null) {
+            } else if (presetRole == null || presetRole.equals("")) {
                 modelAndView.addObject("error", "请填写新用户预设角色喵~");
             } else {
                 if (!presetRole.equals("admin") && !presetRole.equals("user")) {

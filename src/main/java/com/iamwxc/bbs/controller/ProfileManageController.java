@@ -51,7 +51,7 @@ public class ProfileManageController {
         MyUser currentUser = myUserUtil.getLoginUser();
 
         // update username
-        if (newUsername == null) {
+        if (newUsername == null || newUsername.equals("")) {
             isUpdateUsername = true;
             modelAndView.addObject("usernameNull", "用户名不能为空喵~");
         }
@@ -67,7 +67,7 @@ public class ProfileManageController {
 
         }
         // update password
-        if (newPassword == null)
+        if (newPassword == null || newPassword.equals(""))
             modelAndView.addObject("passwordNull", "密码不能为空喵~");
         else if (!newPassword.equals(currentUser.getPassword())) {
             currentUser.setPassword(newPassword);
@@ -75,7 +75,7 @@ public class ProfileManageController {
                 isUpdatePassword = true;
         }
         // update email addr
-        if (newEmailAddress != null) {
+        if (newEmailAddress != null && !newEmailAddress.equals("")) {
             currentUser.setEmailAddress(newEmailAddress);
             String MD5 = DigestUtils.md5DigestAsHex(newEmailAddress.getBytes());
             String newProfileURL = "http://www.gravatar.com/avatar/" + MD5 + "?s=64";
