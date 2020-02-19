@@ -5,7 +5,6 @@ import com.iamwxc.bbs.entity.MyUser;
 import com.iamwxc.bbs.util.MyUserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
