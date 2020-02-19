@@ -3,6 +3,7 @@ package com.iamwxc.bbs.service;
 import com.iamwxc.bbs.dao.MomentDAO;
 import com.iamwxc.bbs.dto.PageDTO;
 import com.iamwxc.bbs.entity.moment.Moment;
+import com.iamwxc.bbs.util.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -24,10 +25,13 @@ import java.util.List;
  * @version 1.0
  */
 @Service
-public class IndexMomentPageService {
+public class IndexMomentService {
 
     @Autowired
     private MomentDAO momentDAO;
+
+    @Autowired
+    private PageUtil<Moment> momentPageUtil;
 
     /**
      * get a given page index moment content in index page
@@ -44,20 +48,7 @@ public class IndexMomentPageService {
         Pageable pageable = PageRequest.of(pageIndex - 1, pageSize, sort);
         Page<Moment> momentPage = momentDAO.findAll(pageable);
 
-        indexMomentPageDTO.setPageNumber(momentPage.getTotalPages());
-        if (pageIndex.equals(1))
-            indexMomentPageDTO.setFirstPage(true);
-        else
-            indexMomentPageDTO.setFirstPage(false);
-        if (pageIndex.equals(indexMomentPageDTO.getPageNumber()))
-            indexMomentPageDTO.setLastPage(true);
-        else
-            indexMomentPageDTO.setLastPage(false);
-        List<Moment> currentPageMoments = new ArrayList<>();
-        for (Moment moment : momentPage) {
-            currentPageMoments.add(moment);
-        }
-        indexMomentPageDTO.setPageContent(currentPageMoments);
+        momentPageUtil.fillContent(indexMomentPageDTO, momentPage, pageIndex);
         return indexMomentPageDTO;
     }
 
