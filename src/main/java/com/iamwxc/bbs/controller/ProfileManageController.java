@@ -45,19 +45,24 @@ public class ProfileManageController {
                                       @RequestParam(value = "password", required = false) String newPassword,
                                       @RequestParam(value = "email", required = false) String newEmailAddress) {
         ModelAndView modelAndView = new ModelAndView("profile");
-        boolean isUpdateUsernameOrPassword = false;
+        boolean isUpdatePassword = false;
+        boolean isUpdateUsername = false;
+        boolean isUpdateUsernameSuccess = false;
         MyUser currentUser = myUserUtil.getLoginUser();
 
         // update username
-        if (newUsername == null)
+        if (newUsername == null) {
+            isUpdateUsername = true;
             modelAndView.addObject("usernameNull", "用户名不能为空喵~");
+        }
         else if (!newUsername.equals(currentUser.getUsername())) {
+            isUpdateUsername = true;
             MyUser myUser = myUserDAO.findByUsername(newUsername);
             if (myUser != null)
                 modelAndView.addObject("usernameExist", "用户名已存在喵~");
             else {
                 currentUser.setUsername(newUsername);
-                isUpdateUsernameOrPassword = true;
+                isUpdateUsernameSuccess = true;
             }
 
         }
@@ -66,7 +71,8 @@ public class ProfileManageController {
             modelAndView.addObject("passwordNull", "密码不能为空喵~");
         else if (!newPassword.equals(currentUser.getPassword())) {
             currentUser.setPassword(newPassword);
-            isUpdateUsernameOrPassword = true;
+            if (!isUpdateUsername || isUpdateUsernameSuccess)
+                isUpdatePassword = true;
         }
         // update email addr
         if (newEmailAddress != null) {
@@ -82,7 +88,7 @@ public class ProfileManageController {
         modelAndView.addObject("email", currentUser.getEmailAddress());
         modelAndView.addObject("profileURL", currentUser.getProfileURL());
         modelAndView.addObject("success", "相关信息已更新喵~");
-        if (isUpdateUsernameOrPassword)
+        if (isUpdateUsernameSuccess || isUpdatePassword)
             modelAndView = new ModelAndView("redirect:/login");
         return modelAndView;
     }
