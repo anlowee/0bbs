@@ -58,5 +58,58 @@
         </div>
     </nav>
 </div>
+<div class="container-fluid main">
+    <div class="row">
+        <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
+            <h2><span class="glyphicon glyphicon-list" aria-hidden="true"><strong> 水池</strong></span></h2>
+            <hr>
+            <div class="media" th:each="moment : ${momentPage.getPageContent()}" style="margin-bottom: 20px">
+                <div class="media-left">
+                    <a href="#">
+                        <img class="media-object media-profile"
+                             th:src="${moment.getMyUser().getProfileURL()}"
+                             alt="">
+                    </a>
+                </div>
+                <div class="media-body">
+                    <h4 class="media-heading"><strong th:text="${moment.getTitle()}"></strong></h4>
+                    <span class="topic-info">
+                        <span class="glyphicon glyphicon-comment" aria-hidden="true">&ensp;<span
+                                th:text="${moment.getComments()}"></span>个回复&emsp;</span>
+                        <span class="glyphicon glyphicon-eye-open" aria-hidden="true">&ensp;<span
+                                th:text="${moment.getReadings()}"></span>次浏览&emsp;</span>
+                        <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true">&ensp;<span
+                                th:text="${moment.getLikes()}"></span>次点赞&emsp;</span>
+                        <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true">&ensp;<span
+                                th:text="${moment.getDislikes()}"></span>次点踩&emsp;</span>
+                        <span class="glyphicon glyphicon-time" aria-hidden="true">&ensp;<span
+                                th:text="${moment.getTimeInfo()}"></span>&emsp;</span>
+                    </span>
+                </div>
+            </div>
+            <hr>
+            <nav aria-label="Page navigation" style="float: right">
+                <ul class="pagination">
+                    <li th:if="${!momentPage.isFirstPage()}">
+                        <a th:href="@{/(page=${momentPage.getPreviousPage()})}">
+                            <span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span>
+                        </a>
+                    </li>
+                    <li class="disabled">
+                        <a th:text="${momentPage.getPageIndex()}"></a>
+                    </li>
+                    <li th:if="${!momentPage.isLastPage()}">
+                        <a th:href="@{/(page=${momentPage.getNextPage()})}">
+                            <span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
+            <h3><strong>🔥🔥🔥热门&精华</strong></h3>
+        </div>
+    </div>
+</div>
 </body>
 </html>

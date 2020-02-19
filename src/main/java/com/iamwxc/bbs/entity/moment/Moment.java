@@ -29,6 +29,7 @@ public class Moment {
         readings = 0L;
         likes = 0L;
         dislikes = 0L;
+        comments = 0L;
     }
 
     @Id
@@ -53,6 +54,8 @@ public class Moment {
 
     private Long likes;
 
+    private Long comments;
+
     private Long dislikes;
 
     @CreatedDate
@@ -60,6 +63,32 @@ public class Moment {
 
     @LastModifiedDate
     private Long gmtModified;
+
+    public String getTimeInfo() {
+        long seconds = (System.currentTimeMillis() - gmtCreate) / 1000;
+        long years = seconds / 60 / 60 / 24 / 365;
+        long months = seconds / 60 / 60 / 24 / 30;
+        long weeks = seconds / 60 / 60 / 24 / 7;
+        long days = seconds / 60 / 60 / 24;
+        long hours = seconds / 60 / 60;
+        long minutes = seconds / 60;
+        String timeInfo = "";
+        if (years > 0)
+            timeInfo = years + "年前";
+        else if (months > 0)
+            timeInfo = months + "月前";
+        else if (weeks > 0)
+            timeInfo = weeks + "周前";
+        else if (days > 0)
+            timeInfo = days + "天前";
+        else if (hours > 0)
+            timeInfo = hours + "小时前";
+        else if (minutes > 0)
+            timeInfo = minutes + "分钟前";
+        else
+            timeInfo = seconds + "秒前";
+        return timeInfo;
+    }
 
     public void addMomentComment(MomentComment momentComment) {
         momentComments.add(momentComment);

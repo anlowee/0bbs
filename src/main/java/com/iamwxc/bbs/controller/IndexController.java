@@ -2,10 +2,15 @@ package com.iamwxc.bbs.controller;
 
 import com.iamwxc.bbs.dao.MomentDAO;
 import com.iamwxc.bbs.dao.MyUserDAO;
+import com.iamwxc.bbs.dto.PageDTO;
 import com.iamwxc.bbs.entity.MyUser;
+import com.iamwxc.bbs.entity.moment.Moment;
+import com.iamwxc.bbs.service.IndexMomentPageService;
 import com.iamwxc.bbs.util.MyUserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -27,12 +32,17 @@ public class IndexController {
     @Autowired
     private MyUserUtil myUserUtil;
 
+    @Autowired
+    private IndexMomentPageService indexMomentPageService;
+
     @GetMapping("/")
-    public ModelAndView index() {
+    public ModelAndView index(@RequestParam(name = "page", defaultValue = "1") Integer pageIndex) {
         ModelAndView modelAndView = new ModelAndView("index");
         MyUser currentUser = myUserUtil.getLoginUser();
         modelAndView.addObject("user", currentUser);
-        modelAndView.addObject("moments", momentDAO.findByMomentID(1L));
+
+        PageDTO<Moment> indexMomentPage = indexMomentPageService.getIndexMomentPage(pageIndex, 10, Sort.by(Sort.Direction.DESC, "gmtModified"));
+        modelAndView.addObject("momentPage",indexMomentPage);
         return modelAndView;
     }
 
