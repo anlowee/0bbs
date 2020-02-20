@@ -26,7 +26,6 @@ import java.util.List;
 public class Moment {
 
     public Moment() {
-        readings = 0L;
         likes = 0L;
         dislikes = 0L;
         comments = 0L;
@@ -50,8 +49,6 @@ public class Moment {
     private List<MomentComment> momentComments;
 
     // other info
-    private Long readings;
-
     private Long likes;
 
     private Long comments;

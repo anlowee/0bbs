@@ -29,8 +29,6 @@
                     <span class="topic-info">
                         <span class="glyphicon glyphicon-comment" aria-hidden="true">&ensp;<span
                                 th:text="${moment.getComments()}"></span>个回复&emsp;</span>
-                        <span class="glyphicon glyphicon-eye-open" aria-hidden="true">&ensp;<span
-                                th:text="${moment.getReadings()}"></span>次浏览&emsp;</span>
                         <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true">&ensp;<span
                                 th:text="${moment.getLikes()}"></span>次点赞&emsp;</span>
                         <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true">&ensp;<span
@@ -51,7 +49,7 @@
                 </div>
                 <div class="form-group">
                     <label for="content">评论内容</label>
-                    <textarea name="content" id="content" th:text="${content}" class="form-control"
+                    <textarea name="content" id="content" class="form-control"
                               cols="20" rows="7"
                               placeholder="评论一下喵~"></textarea>
                 </div>

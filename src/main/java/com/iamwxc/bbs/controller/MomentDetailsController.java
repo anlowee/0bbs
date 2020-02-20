@@ -42,14 +42,11 @@ public class MomentDetailsController {
     @PostMapping("/comment")
     public ModelAndView doComment(@RequestParam(value = "id", required = false) Long momentID,
                                   @RequestParam(value = "content", required = false) String content) {
-        ModelAndView modelAndView = new ModelAndView("moment-details");
+        ModelAndView modelAndView = new ModelAndView("redirect:/details");
         MyUser currentUser = myUserUtil.getLoginUser();
-        modelAndView.addObject("content", "");
         modelAndView.addObject("id", momentID);
         CustomErrorCode status = momentDetailsService.doComment(currentUser, momentID, content);
-        ModelAndView redirect = new ModelAndView("redirect:/details");
-        redirect.addObject("id", momentID);
-        return redirect;
+        return modelAndView;
     }
 
 }
