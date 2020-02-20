@@ -11,12 +11,17 @@ package com.iamwxc.bbs.util;
  */
 public enum CustomErrorCode {
 
-    // global
+    PARAM_NULL,
+
     PARAM_ALL_NULL,
 
     USER_NOT_FOUND,
 
     USER_EXIST,
+
+    REQUEST_SUCCESS,
+
+    REQUEST_FAILED,
 
     DELETE_USER_SUCCESS,
 

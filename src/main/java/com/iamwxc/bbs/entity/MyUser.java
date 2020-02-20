@@ -76,6 +76,16 @@ public class MyUser {
         moment.setMyUser(null);
     }
 
+    public void addMomentComment(MomentComment momentComment) {
+        momentComments.add(momentComment);
+        momentComment.setMyUser(this);
+    }
+
+    public void removeMomentComment(MomentComment momentComment) {
+        momentComments.remove(momentComment);
+        momentComment.setMyUser(null);
+    }
+
     @Override
     public String toString() {
         Date createDate = new Date();

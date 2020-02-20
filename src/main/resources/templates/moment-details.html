@@ -41,6 +41,49 @@
                 </div>
             </div>
             <p th:text="${moment.getContent()}"></p>
+            <hr>
+            <h2><span class="glyphicon glyphicon-send" aria-hidden="true"><strong> 发表评论</strong></span></h2>
+            <hr>
+            <form th:action="@{/comment}" method="post">
+                <div style="display: none">
+                    <label for="id"></label>
+                    <input type="number" id="id" th:value="${moment.getMomentID()}" name="id">
+                </div>
+                <div class="form-group">
+                    <label for="content">评论内容</label>
+                    <textarea name="content" id="content" th:text="${content}" class="form-control"
+                              cols="20" rows="7"
+                              placeholder="评论一下喵~"></textarea>
+                </div>
+                <button type="submit" class="btn btn-success btn-publish"><span class="glyphicon glyphicon-send"
+                                                                                aria-hidden="true"></span></button>
+            </form>
+            <hr>
+            <h2><span class="glyphicon glyphicon-comment" aria-hidden="true"><strong> 评论区</strong></span></h2>
+            <hr>
+            <div class="media" th:each="comment : ${comments}" style="margin-bottom: 20px">
+                <div class="media-left">
+                    <a href="#">
+                        <img class="media-object media-profile"
+                             th:src="${comment.getMyUser().getProfileURL()}"
+                             alt="">
+                    </a>
+                </div>
+                <div class="media-body">
+                    <h4 class="media-heading"><strong th:text="${comment.getMyUser().getUsername()}"></strong></h4>
+                    <span class="topic-info">
+                        <span class="glyphicon glyphicon-comment" aria-hidden="true">&ensp;<span
+                                th:text="${comment.getComments()}"></span>个回复&emsp;</span>
+                        <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true">&ensp;<span
+                                th:text="${comment.getLikes()}"></span>次点赞&emsp;</span>
+                        <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true">&ensp;<span
+                                th:text="${comment.getDislikes()}"></span>次点踩&emsp;</span>
+                        <span class="glyphicon glyphicon-time" aria-hidden="true">&ensp;<span
+                                th:text="${comment.getTimeInfo()}"></span>&emsp;</span>
+                        <p th:text="${comment.getContent()}"></p>
+                    </span>
+                </div>
+            </div>
         </div>
         <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
             <h3><strong>注意事项</strong></h3>

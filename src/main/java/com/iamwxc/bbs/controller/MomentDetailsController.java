@@ -1,11 +1,15 @@
 package com.iamwxc.bbs.controller;
 
+import com.iamwxc.bbs.entity.MyUser;
 import com.iamwxc.bbs.entity.moment.Moment;
 import com.iamwxc.bbs.service.MomentDetailsService;
+import com.iamwxc.bbs.util.CustomErrorCode;
+import com.iamwxc.bbs.util.MyUserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
@@ -17,17 +21,35 @@ import org.springframework.web.servlet.ModelAndView;
  * @author CC
  * @version 1.0
  */
-@RestController
+@Controller
 public class MomentDetailsController {
 
     @Autowired
     private MomentDetailsService momentDetailsService;
 
+    @Autowired
+    private MyUserUtil myUserUtil;
+
     @GetMapping("/details")
-    public ModelAndView seeMomentDetails(@RequestParam(value = "id", required = true) Long momentID) {
+    public ModelAndView seeMomentDetails(@RequestParam(value = "id") Long momentID) {
         ModelAndView modelAndView = new ModelAndView("moment-details");
-        modelAndView.addObject("moment", momentDetailsService.getCurrentMoment(momentID));
+        Moment currentMoment = momentDetailsService.getCurrentMoment(momentID);
+        modelAndView.addObject("moment", currentMoment);
+        modelAndView.addObject("comments", currentMoment.getMomentComments());
         return modelAndView;
+    }
+
+    @PostMapping("/comment")
+    public ModelAndView doComment(@RequestParam(value = "id", required = false) Long momentID,
+                                  @RequestParam(value = "content", required = false) String content) {
+        ModelAndView modelAndView = new ModelAndView("moment-details");
+        MyUser currentUser = myUserUtil.getLoginUser();
+        modelAndView.addObject("content", "");
+        modelAndView.addObject("id", momentID);
+        CustomErrorCode status = momentDetailsService.doComment(currentUser, momentID, content);
+        ModelAndView redirect = new ModelAndView("redirect:/details");
+        redirect.addObject("id", momentID);
+        return redirect;
     }
 
 }
