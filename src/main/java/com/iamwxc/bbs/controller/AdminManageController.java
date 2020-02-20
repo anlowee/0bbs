@@ -2,6 +2,8 @@ package com.iamwxc.bbs.controller;
 
 import com.iamwxc.bbs.dao.MyUserDAO;
 import com.iamwxc.bbs.entity.MyUser;
+import com.iamwxc.bbs.service.AdminManageService;
+import com.iamwxc.bbs.util.CustomErrorCode;
 import com.iamwxc.bbs.util.MyUserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -26,24 +28,14 @@ import java.util.List;
 public class AdminManageController {
 
     @Autowired
-    private MyUserDAO myUserDAO;
-
-    @Autowired
-    private MyUserUtil myUserUtil;
-
-    private boolean checkAuthority() {
-        MyUser currentUser = myUserUtil.getLoginUser();
-        if (currentUser == null)
-            return false;
-        else return currentUser.getRole().equals("admin");
-    }
+    private AdminManageService adminManageService;
 
     @GetMapping("/admin")
     public ModelAndView administration() {
         ModelAndView modelAndView = new ModelAndView();
-        if (checkAuthority()) {
+        if (adminManageService.checkAuthority()) {
             modelAndView.setViewName("admin");
-            List<MyUser> myUsers = myUserDAO.findAll(Sort.by(Sort.Direction.ASC, "username"));
+            List<MyUser> myUsers = adminManageService.getAllUser();
             modelAndView.addObject("userList", myUsers);
         } else
             modelAndView.setViewName("redirect:/");
@@ -62,52 +54,40 @@ public class AdminManageController {
         modelAndView.addObject("presetRole", "");
         modelAndView.addObject("delUsername", "");
 
-        if ((presetUsername == null || presetUsername.equals("")) &&
-                (presetPassword == null || presetPassword.equals("")) &&
-                (presetRole == null || presetRole.equals("")) &&
-                (delUsername == null || delUsername.equals("")))
-            // if admin submit nothing
-            modelAndView.addObject("error", "请填写注册用户或注销用户的信息喵~");
-        else if (delUsername != null && !delUsername.equals("")) {
-            // handle delete user
-            MyUser targetUser = myUserDAO.findByUsername(delUsername);
-            if (targetUser == null) {
-                // cannot find user
+        CustomErrorCode status = adminManageService.updateUserRepo(presetUsername, presetPassword, presetRole, delUsername);
+        switch (status) {
+            case REGISTER_USER_SUCCESS:
+                modelAndView.addObject("success", "注册成功喵~");
+                break;
+            case DELETE_USER_SUCCESS:
+                modelAndView.addObject("success", "注销成功喵~");
+                break;
+            case PARAM_ALL_NULL:
+                modelAndView.addObject("error", "您啥都没填喵~");
+                break;
+            case USER_EXIST:
+                modelAndView.addObject("error", "该用户名已存在喵~");
+                break;
+            case USER_NOT_FOUND:
                 modelAndView.addObject("error", "未找到该用户喵~");
-            } else {
-                // delete
-                myUserDAO.delete(targetUser);
-                modelAndView.addObject("success", "注销用户成功喵~");
-            }
-        } else {
-            // handle register user
-            if (presetUsername == null || presetUsername.equals("")) {
-                modelAndView.addObject("error", "请填写新用户预设用户名喵~");
-            } else if (presetPassword == null || presetPassword.equals("")) {
-                modelAndView.addObject("error", "请填写新用户预设密码喵~");
-            } else if (presetRole == null || presetRole.equals("")) {
-                modelAndView.addObject("error", "请填写新用户预设角色喵~");
-            } else {
-                if (!presetRole.equals("admin") && !presetRole.equals("user")) {
-                    modelAndView.addObject("error", "角色仅有admin/user喵~");
-                } else {
-                    // check if username existed
-                    MyUser newUser = myUserDAO.findByUsername(presetUsername);
-                    if (newUser != null) {
-                        modelAndView.addObject("error", "该用户名已存在喵~");
-                    } else {
-                        newUser = new MyUser();
-                        newUser.setUsername(presetUsername);
-                        newUser.setPassword(presetPassword);
-                        newUser.setRole(presetRole);
-                        myUserDAO.save(newUser);
-                        modelAndView.addObject("success", "注册新用户成功喵~");
-                    }
-                }
-            }
+                break;
+            case USERNAME_NULL:
+                modelAndView.addObject("error", "请填写新用户用户名喵~");
+                break;
+            case PASSWORD_NULL:
+                modelAndView.addObject("error", "请填写新用户密码喵~");
+                break;
+            case ROLE_NULL:
+                modelAndView.addObject("error", "请填写新用户权限喵~");
+                break;
+            case ROLE_WRONG:
+                modelAndView.addObject("error", "用户权限错误喵~");
+                break;
+            default:
+                modelAndView.addObject("error", "出错叻喵~");
         }
         // update user list
-        List<MyUser> myUsers = myUserDAO.findAll(Sort.by(Sort.Direction.ASC, "username"));
+        List<MyUser> myUsers = adminManageService.getAllUser();
         modelAndView.addObject("userList", myUsers);
         return modelAndView;
     }

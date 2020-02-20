@@ -1,6 +1,5 @@
 package com.iamwxc.bbs.controller;
 
-import com.iamwxc.bbs.dao.MomentDAO;
 import com.iamwxc.bbs.dto.PageDTO;
 import com.iamwxc.bbs.entity.MyUser;
 import com.iamwxc.bbs.entity.moment.Moment;
@@ -24,9 +23,6 @@ import org.springframework.web.servlet.ModelAndView;
  */
 @RestController
 public class IndexController {
-
-    @Autowired
-    private MomentDAO momentDAO;
 
     @Autowired
     private MyUserUtil myUserUtil;

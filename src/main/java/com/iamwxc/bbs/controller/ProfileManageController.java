@@ -2,6 +2,8 @@ package com.iamwxc.bbs.controller;
 
 import com.iamwxc.bbs.dao.MyUserDAO;
 import com.iamwxc.bbs.entity.MyUser;
+import com.iamwxc.bbs.service.ProfileManageService;
+import com.iamwxc.bbs.util.CustomErrorCode;
 import com.iamwxc.bbs.util.MyUserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.DigestUtils;
@@ -27,7 +29,7 @@ public class ProfileManageController {
     private MyUserUtil myUserUtil;
 
     @Autowired
-    private MyUserDAO myUserDAO;
+    private ProfileManageService profileManageService;
 
     @GetMapping("/profile")
     public ModelAndView profile() {
@@ -45,51 +47,29 @@ public class ProfileManageController {
                                       @RequestParam(value = "password", required = false) String newPassword,
                                       @RequestParam(value = "email", required = false) String newEmailAddress) {
         ModelAndView modelAndView = new ModelAndView("profile");
-        boolean isUpdatePassword = false;
-        boolean isUpdateUsername = false;
-        boolean isUpdateUsernameSuccess = false;
         MyUser currentUser = myUserUtil.getLoginUser();
 
-        // update username
-        if (newUsername == null || newUsername.equals("")) {
-            isUpdateUsername = true;
-            modelAndView.addObject("usernameNull", "用户名不能为空喵~");
+        CustomErrorCode status = profileManageService.updateUserProfile(currentUser, newUsername, newPassword, newEmailAddress);
+        switch (status) {
+            case UPDATE_FAILED:
+                modelAndView.addObject("username", currentUser.getUsername());
+                modelAndView.addObject("password", currentUser.getPassword());
+                modelAndView.addObject("email", currentUser.getEmailAddress());
+                modelAndView.addObject("profileURL", currentUser.getProfileURL());
+            case USERNAME_NULL:
+                modelAndView.addObject("error", "用户名不能为空喵~");
+                break;
+            case USER_EXIST:
+                modelAndView.addObject("error", "用户名已存在喵~");
+                break;
+            case PASSWORD_NULL:
+                modelAndView.addObject("error", "密码不能为空喵~");
+                break;
+            case UPDATE_SUCCESS:
+                modelAndView = new ModelAndView("redirect:/login");
+                break;
         }
-        else if (!newUsername.equals(currentUser.getUsername())) {
-            isUpdateUsername = true;
-            MyUser myUser = myUserDAO.findByUsername(newUsername);
-            if (myUser != null)
-                modelAndView.addObject("usernameExist", "用户名已存在喵~");
-            else {
-                currentUser.setUsername(newUsername);
-                isUpdateUsernameSuccess = true;
-            }
 
-        }
-        // update password
-        if (newPassword == null || newPassword.equals(""))
-            modelAndView.addObject("passwordNull", "密码不能为空喵~");
-        else if (!newPassword.equals(currentUser.getPassword())) {
-            currentUser.setPassword(newPassword);
-            if (!isUpdateUsername || isUpdateUsernameSuccess)
-                isUpdatePassword = true;
-        }
-        // update email addr
-        if (newEmailAddress != null && !newEmailAddress.equals("")) {
-            currentUser.setEmailAddress(newEmailAddress);
-            String MD5 = DigestUtils.md5DigestAsHex(newEmailAddress.getBytes());
-            String newProfileURL = "http://www.gravatar.com/avatar/" + MD5 + "?s=64";
-            currentUser.setProfileURL(newProfileURL);
-        }
-        myUserDAO.save(currentUser);
-
-        modelAndView.addObject("username", currentUser.getUsername());
-        modelAndView.addObject("password", currentUser.getPassword());
-        modelAndView.addObject("email", currentUser.getEmailAddress());
-        modelAndView.addObject("profileURL", currentUser.getProfileURL());
-        modelAndView.addObject("success", "相关信息已更新喵~");
-        if (isUpdateUsernameSuccess || isUpdatePassword)
-            modelAndView = new ModelAndView("redirect:/login");
         return modelAndView;
     }
 
