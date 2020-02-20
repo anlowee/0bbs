@@ -65,7 +65,7 @@
             <hr>
             <div class="media" th:each="moment : ${momentPage.getPageContent()}" style="margin-bottom: 20px">
                 <div class="media-left">
-                    <a href="#">
+                    <a th:href="@{/details(id=${moment.getMomentID()})}">
                         <img class="media-object media-profile"
                              th:src="${moment.getMyUser().getProfileURL()}"
                              alt="">

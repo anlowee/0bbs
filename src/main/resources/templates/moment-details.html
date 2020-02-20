@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="">
 <head>
-    <title>帖子管理</title>
+    <title>编辑帖子</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/bootstrap-theme.min.css">
@@ -9,15 +9,16 @@
     <script src="js/jquery.js" type="application/javascript"></script>
     <script src="js/bootstrap.min.js" type="application/javascript"></script>
 </head>
+
 <body>
 <div class="container-fluid main">
     <div class="row">
         <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
-            <h2><span class="glyphicon glyphicon-list" aria-hidden="true"><strong> 水池</strong></span></h2>
+            <h2><span class="glyphicon glyphicon-sunglasses" aria-hidden="true"><strong> 帖子详情</strong></span></h2>
             <hr>
-            <div class="media" th:each="moment : ${momentPage.getPageContent()}" style="margin-bottom: 20px">
+            <div class="media" style="margin-bottom: 20px">
                 <div class="media-left">
-                    <a th:href="@{/details(id=${moment.getMomentID()})}">
+                    <a href="#">
                         <img class="media-object media-profile"
                              th:src="${moment.getMyUser().getProfileURL()}"
                              alt="">
@@ -39,27 +40,24 @@
                     </span>
                 </div>
             </div>
-            <hr>
-            <nav aria-label="Page navigation" style="float: right">
-                <ul class="pagination">
-                    <li th:if="${!momentPage.isFirstPage()}">
-                        <a th:href="@{/moments(page=${momentPage.getPreviousPage()})}">
-                            <span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span>
-                        </a>
-                    </li>
-                    <li class="disabled">
-                        <a th:text="${momentPage.getPageIndex()}"></a>
-                    </li>
-                    <li th:if="${!momentPage.isLastPage()}">
-                        <a th:href="@{/moments(page=${momentPage.getNextPage()})}">
-                            <span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
+            <p th:text="${moment.getContent()}"></p>
         </div>
         <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
-            <h3><strong>🔥🔥🔥热门&精华</strong></h3>
+            <h3><strong>注意事项</strong></h3>
+            <strong>
+                <p>
+                    1.本章条例的执行方式。群主和管理员都可以依照集体利益最大化的原则判断并执行，遇到遗漏时，其他成员可以提醒群主或管理员判断和执行。
+                </p>
+                <p>
+                    2.严厉打击互吹卖弱、溜须拍马行为，违者处以禁言惩罚。
+                </p>
+                <p>
+                    3.严厉打击造谣传谣行为，违者处以撤回和禁言惩罚。
+                </p>
+                <p>
+                    4.严厉打击黄赌毒及其他危害身心健康或引起不适的言论与行为。违者处以撤回惩罚。
+                </p>
+            </strong>
         </div>
     </div>
 </div>
