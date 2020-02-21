@@ -1,11 +1,14 @@
 package com.iamwxc.bbs.controller;
 
+import com.iamwxc.bbs.dto.PageDTO;
 import com.iamwxc.bbs.entity.MyUser;
 import com.iamwxc.bbs.entity.moment.Moment;
+import com.iamwxc.bbs.entity.moment.MomentComment;
 import com.iamwxc.bbs.service.MomentDetailsService;
 import com.iamwxc.bbs.util.CustomErrorCode;
 import com.iamwxc.bbs.util.MyUserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,11 +34,13 @@ public class MomentDetailsController {
     private MyUserUtil myUserUtil;
 
     @GetMapping("/details")
-    public ModelAndView seeMomentDetails(@RequestParam(value = "id") Long momentID) {
+    public ModelAndView seeMomentDetails(@RequestParam(value = "id") Long momentID,
+                                         @RequestParam(value = "page", defaultValue = "1") Integer pageIndex) {
         ModelAndView modelAndView = new ModelAndView("moment-details");
         Moment currentMoment = momentDetailsService.getCurrentMoment(momentID);
         modelAndView.addObject("moment", currentMoment);
-        modelAndView.addObject("comments", currentMoment.getMomentComments());
+        PageDTO<MomentComment> momentCommentPage = momentDetailsService.getMomentCommentPage(pageIndex, 10, Sort.by(Sort.Direction.DESC, "gmtModified"), currentMoment);
+        modelAndView.addObject("commentPage", momentCommentPage);
         return modelAndView;
     }
 
