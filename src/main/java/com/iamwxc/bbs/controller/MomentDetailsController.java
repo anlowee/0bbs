@@ -37,6 +37,8 @@ public class MomentDetailsController {
     public ModelAndView seeMomentDetails(@RequestParam(value = "id") Long momentID,
                                          @RequestParam(value = "page", defaultValue = "1") Integer pageIndex) {
         ModelAndView modelAndView = new ModelAndView("moment-details");
+        MyUser currentUser = myUserUtil.getLoginUser();
+        modelAndView.addObject("user", currentUser);
         Moment currentMoment = momentDetailsService.getCurrentMoment(momentID);
         modelAndView.addObject("moment", currentMoment);
         PageDTO<MomentComment> momentCommentPage = momentDetailsService.getMomentCommentPage(pageIndex, 10, Sort.by(Sort.Direction.DESC, "gmtModified"), currentMoment);

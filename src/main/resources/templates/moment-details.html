@@ -38,7 +38,18 @@
                     </span>
                 </div>
             </div>
-            <p th:text="${moment.getContent()}"></p>
+            <div>
+                <p th:text="${moment.getContent()}"></p>
+                <a href="#" class="btn btn-danger btn-lg btn-publish" role="button"><span
+                        class="glyphicon glyphicon-thumbs-down"
+                        aria-hidden="true"> 踩</span></a>
+                <a href="#" class="btn btn-success btn-lg btn-publish" role="button"><span
+                        class="glyphicon glyphicon-thumbs-up"
+                        aria-hidden="true"> 赞</span></a>
+                <a href="#" th:if="${user.getUserID() == moment.getMyUser().getUserID()}"
+                   class="btn btn-info btn-lg btn-publish" role="button"><span class="glyphicon glyphicon-pencil"
+                                                                               aria-hidden="true"> 编辑</span></a>
+            </div>
             <hr>
             <h2><span class="glyphicon glyphicon-send" aria-hidden="true"><strong> 发表评论</strong></span></h2>
             <hr>
